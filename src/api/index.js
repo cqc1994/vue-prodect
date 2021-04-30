@@ -5,5 +5,5 @@ export function demo(data){
         url:'/user/vrVisit/hospital/list',
         method:'POST',
         data
-    },false,)
+    })
 }

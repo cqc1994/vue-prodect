@@ -50,16 +50,17 @@ const token = config => {
 const removeQueue = config => {
     for (let i = 0, size = queue.length; i < size; i++) {
         const task = queue[i]
-        if (task.token === token(config) && (token(config).indexOf('order/warehouseInfo/query') == -1) || (task.token.indexOf('trader/findClientAllList/select') != -1 && token(config).indexOf('trader/findClientAllList/select') != -1)) {
+        if (task.token === token(config)) {
             task.cancel()
             queue.splice(i, 1)
             break
         }
     }
 }
+const http = axios.create()
 
 //请求拦截
-axios.interceptors.request.use(config=>{
+http.interceptors.request.use(config=>{
     removeQueue(config) // 中断之前的同名请求---这是axios的防抖处理  防止用户多次点击的情况下产生的多次请求的问题
     // 添加cancelToken
     config.cancelToken = new cancelToken(c => {
@@ -69,16 +70,17 @@ axios.interceptors.request.use(config=>{
     //一定要将config return 出去
     return config
 })
-//响应拦截
-axios.interceptors.response.use(response=>{
-    console.log(1111,response) //建议打印一下 有些后台返回回来的数据格式不同  可根据自己的数据格式进行调整
-    removeQueue(response.config)
-    return response
-},error => {
-    return Promise.reject(error)
-})
-const http = axios.create()
+
+
 export const request = (data,showError = true,Loading = true)=>{
+    //响应拦截
+    http.interceptors.response.use(response=>{
+        console.log(data.url+' : ',response) //建议打印一下 有些后台返回回来的数据格式不同  可根据自己的数据格式进行调整
+        removeQueue(response.config)
+        return response
+    },error => {
+        return Promise.reject(error)
+    })
     if (Loading){
         loading.open() //打开加载窗口
     }
