@@ -19,6 +19,10 @@ export default {
       }
     },
     created() {
+      let a = {a:1}
+      let b = this.$deepCopy(a)
+      b.a = 2
+      console.log(a, b);
       this.init()
     }
   }

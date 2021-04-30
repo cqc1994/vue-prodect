@@ -7,4 +7,15 @@ import router from './router'
 import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
 
-createApp(App).use(ElementPlus).use(router).use(store).mount('#app')
+import tool from "@/js/tool";
+
+const app =createApp(App)
+
+app.use(ElementPlus).use(router).use(store).mount('#app')
+
+/**挂载一些工具方法**/
+app.config.globalProperties = {
+    '$deepCopy': tool.deepCopy,//深度克隆
+    '$debounce': tool.debounce,//防抖
+}
+
