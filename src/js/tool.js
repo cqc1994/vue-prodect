@@ -40,7 +40,7 @@ const deepCopy = (obj, cache = []) => {
     return copy;
 }
 /**
- * 防抖函数
+ * 防抖函数 this.$debounce(fn)
  **/
 const debounce = (fn, delay = 1000) => {
     let timer
